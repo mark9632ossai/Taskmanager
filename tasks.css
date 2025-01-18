@@ -1,0 +1,15 @@
+body{
+    align-items: center;
+    box-sizing: border-box;
+}
+nav{
+   background-color: red; 
+   
+}
+
+h1{
+    font-family: 'Courier New', Courier, monospace;
+    font-size: medium;
+    color: white;
+    text-shadow: 2px;
+}
