@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager App</title>
+    <style>
+        /* General Reset */
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        nav {
+            background-color: #0077b6;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-button {
+            background-color: #00b4d8;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .add-button:hover {
+            background-color: #0096c7;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0077b6;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .edit-button {
+            background: #38b000;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .edit-button:hover {
+            background-color: #2d6a4f;
+        }
+
+        .delete-button {
+            background: #e63946;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .delete-button:hover {
+            background-color: #d00000;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50px;
+            background-color: #023e8a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+        h1, h3 {
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            nav {
+                font-size: 1.2rem;
+            }
+
+            .add-button {
+                font-size: 0.9rem;
+                padding: 8px 12px;
+            }
+
+            th, td {
+                font-size: 0.9rem;
+            }
+
+            footer {
+                font-size: 0.8rem;
+            }
+        }
+
+        .custom-checkbox input[type="checkbox"] {
+        display: none;
+    }
+
+    /* Create a custom checkbox */
+    .custom-checkbox {
+        display: inline-block;
+        position: relative;
+        cursor: not-allowed; /* Indicate that it's not clickable */
+        font-size: 1rem;
+        user-select: none; /* Prevent text selection */
+    }
+
+    /* The custom checkbox appearance */
+    .custom-checkbox .checkmark {
+        width: 20px;
+        height: 20px;
+        background-color: #ddd;
+        border-radius: 4px;
+        display: inline-block;
+        position: relative;
+        transition: background-color 0.3s, border-color 0.3s;
+        border: 2px solid #ccc;
+    }
+
+    /* Add a checkmark indicator */
+    .custom-checkbox .checkmark::after {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 14px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        top: 2px;
+        left: 6px;
+        display: none;
+    }
+
+    /* When the checkbox is checked */
+    .custom-checkbox input[type="checkbox"]:checked + .checkmark {
+        background-color: #0077b6;
+        border-color: #0077b6;
+    }
+
+    .custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
+        display: block;
+    }
+
+    /* When hovered (optional, even though it's disabled) */
+    .custom-checkbox .checkmark:hover {
+        background-color: #e0e0e0;
+        border-color: #aaa;
+    }
+    </style>
+</head>
+<body>
+    <nav>TASK MANAGER APP</nav>
+    <div class="container">
+        <a href="/tasks/add"><button class="add-button"> Add tasks</button></a>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>S/N</th>
+                    <th>Tasks</th>
+                    <th>Checkbox</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% tasks.forEach(task => { %>
+                    <tr>
+                        <td><%= task.id %></td>
+                        <td>
+                            <a href="/tasks/single-task/<%= task.id %>"><%= task.task %></a>
+                        </td>
+                        <td>
+                            <form action="/views/Add-task.ejs" method="post">
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" name="check" id="check" <%= task.check ? 'checked' : '' %> disabled>
+                                    <span class="checkmark"></span>
+                                </label>                           
+                             </form>
+                        </td>
+                        <td>
+                            <a href="/tasks/edit/<%= task.id %>" class="edit-button">Edit</a>
+                            <form action="/tasks/delete/<%= task.id %>?_method = DELETE" method="post" style="display: inline;">
+                                <button type="submit" class="delete-button" id="delete">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+    <footer>
+        <h3>Created by Ossai Mark</h3>
+    </footer>
+</body>
+</html>
