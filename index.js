@@ -1,15 +1,14 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
-import { connectDB } from './mongodb/config/dbconection.js';
+
 
 let tasks = [
     { id: 1, task: "Sample Task 1", check: false },
     { id: 2, task: "Sample Task 2", check: true },
 ];
 
-// Connect to the database
-connectDB();
+
 
 const app = express();
 
@@ -95,7 +94,7 @@ app.put('/tasks/edit/:id', (req, res) => {
 });
 
 // Delete a task and reassign IDs
-app.post('/tasks/delete/:id', (req, res) => {
+app.post('/tasks/delete/g:id', (req, res) => {
     const { id } = req.params;
 
     tasks = tasks.filter((u) => u.id !== parseInt(id));
