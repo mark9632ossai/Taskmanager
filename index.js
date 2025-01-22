@@ -8,7 +8,6 @@ let tasks = [
     { id: 2, task: "Sample Task 2", check: true },
 ];
 
-// Connect to the database (if applicable)
 connectDB();
 
 const app = express();
@@ -106,13 +105,12 @@ app.post('/tasks/delete/:id', (req, res) => {
     // Reassign IDs to maintain proper S/N order
     tasks = tasks.map((task, index) => ({
         ...task,
-        id: index + 1, // Reassign IDs starting from 1
+        id: index + 1, 
     }));
 
     res.redirect('/tasks');
 });
 
-// Start the server
 const port = 5000;
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

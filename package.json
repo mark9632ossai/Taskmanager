@@ -1,16 +1,17 @@
 {
   "name": "taskmanager",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon app.js",
+    "dev": "nodemon index.js",
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["task", "manager", "todo", "express", "ejs"],
+  "author": "Your Name",
   "license": "ISC",
-  "description": "",
+  "description": "A task manager application built with Express, EJS, and MongoDB.",
   "dependencies": {
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.7",
