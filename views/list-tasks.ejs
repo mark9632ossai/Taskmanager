@@ -9,7 +9,7 @@
 <body>
     <nav>TASK MANAGER APP</nav>
     <div class="container">
-        <a href="/tasks/add"><button class="add-button"> Add tasks</button></a>
+        <a href="/tasks/add"><button class="add-button">Add Task</button></a>
 
         <table>
             <thead>
@@ -21,28 +21,34 @@
                 </tr>
             </thead>
             <tbody>
-                <% tasks.forEach(task => { %>
+                <% if (tasks.length === 0) { %>
                     <tr>
-                        <td><%= task.id %></td>
-                        <td>
-                            <a href="/tasks/single-task/<%= task.id %>"><%= task.task %></a>
-                        </td>
-                        <td>
-                            <form action="/views/Add-task.ejs" method="post">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" name="check" id="check" <%= task.check ? 'checked' : '' %> disabled>
-                                    <span class="checkmark"></span>
-                                </label>                           
-                             </form>
-                        </td>
-                        <td>
-                            <a href="/tasks/edit/<%= task.id %>" class="edit-button">Edit</a>
-                            <form action="/tasks/delete/<%= task.id %>?_method = DELETE" method="post" style="display: inline;">
-                                <button type="submit" class="delete-button" id="delete">Delete</button>
-                            </form>
-                        </td>
+                        <td colspan="4">No tasks found</td>
                     </tr>
-                <% }) %>
+                <% } else { %>
+                    <% tasks.forEach(task => { %>
+                        <tr>
+                            <td><%= task.id %></td>
+                            <td>
+                                <a href="/tasks/single-task/<%= task.id %>"><%= task.task %></a>
+                            </td>
+                            <td>
+                                <form>
+                                    <label class="custom-checkbox">
+                                        <input type="checkbox" name="check" <%= task.check ? 'checked' : '' %> disabled>
+                                        <span class="checkmark"></span>
+                                    </label>
+                                </form>
+                            </td>
+                            <td>
+                                <a href="/tasks/edit/<%= task.id %>" class="edit-button">Edit</a>
+                                <form action="/tasks/delete/<%= task.id %>?_method=DELETE" method="post" style="display: inline;">
+                                    <button type="submit" class="delete-button">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }) %>
+                <% } %>
             </tbody>
         </table>
     </div>
