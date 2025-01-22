@@ -8,6 +8,7 @@ let tasks = [
     { id: 2, task: "Sample Task 2", check: true },
 ];
 
+// Connect to the database
 connectDB();
 
 const app = express();
@@ -59,7 +60,6 @@ app.get('/tasks/single-task/:id', (req, res) => {
         return res.status(404).send('Task not found');
     }
 
-    // Determine task status
     const taskStatus = task.check ? "Task is done" : "Task is undone";
 
     res.render('single-task.ejs', { task, taskStatus });
@@ -88,24 +88,22 @@ app.put('/tasks/edit/:id', (req, res) => {
         return res.status(404).send('Task not found');
     }
 
-    // Update task fields
     task.task = updatedTask;
     task.check = check === 'on';
 
     res.redirect('/tasks');
 });
 
-// Delete a task and update S/N
+// Delete a task and reassign IDs
 app.post('/tasks/delete/:id', (req, res) => {
     const { id } = req.params;
 
-    // Remove the task
     tasks = tasks.filter((u) => u.id !== parseInt(id));
 
-    // Reassign IDs to maintain proper S/N order
+    // Reassign IDs to maintain sequential order
     tasks = tasks.map((task, index) => ({
         ...task,
-        id: index + 1, 
+        id: index + 1,
     }));
 
     res.redirect('/tasks');
