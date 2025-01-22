@@ -20,6 +20,9 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride('_method'));
 
+// Serve static files
+app.use(express.static('public'));
+
 // Redirect to the tasks list
 app.get('/', (req, res) => {
     res.redirect('/tasks');
@@ -62,7 +65,6 @@ app.get('/tasks/single-task/:id', (req, res) => {
 
     res.render('single-task.ejs', { task, taskStatus });
 });
-
 
 // Render Edit Task page
 app.get('/tasks/edit/:id', (req, res) => {

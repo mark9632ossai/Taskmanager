@@ -4,62 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Details</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #0077b6;
-        }
-
-        p {
-            font-size: 1.2rem;
-            margin: 10px 0;
-        }
-
-        .status {
-            font-weight: bold;
-            padding: 10px;
-            background-color: #e0f7fa;
-            border: 1px solid #0077b6;
-            border-radius: 5px;
-            text-align: center;
-            color: #0077b6;
-        }
-
-        a {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            text-decoration: none;
-            color: white;
-            background-color: #0077b6;
-            padding: 10px;
-            border-radius: 5px;
-            font-weight: bold;
-        }
-
-        a:hover {
-            background-color: #005f8a;
-        }
-    </style>
+    <link rel="stylesheet" href="/styles/style-single.css">
 </head>
 <body>
+    <nav>TASK MANAGER APP</nav>
+    <div class="maincontainer">
     <div class="container">
         <h1>Task Details</h1>
         <p><strong>Task:</strong> <%= task.task %></p>
@@ -68,5 +17,9 @@
         </div>
         <a href="/tasks">Back to Task List</a>
     </div>
+</div>
+    <footer>
+        <h3>Created by Ossai Mark</h3>
+    </footer>
 </body>
 </html>
