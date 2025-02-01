@@ -5,17 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task Manager App</title>
     <link rel="stylesheet" href="/styles/style-list.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 <body>
     <nav>TASK MANAGER APP</nav>
     <div class="container">
         <a href="/tasks/add"><button class="add-button">Add Task</button></a>
 
+        <!-- Button to enable sound -->
+        <button id="enable-sound">Enable Sound</button>
+
         <table>
             <thead>
                 <tr>
                     <th>S/N</th>
                     <th>Tasks</th>
+                    <th>Alarm Time</th>
                     <th>Checkbox</th>
                     <th>Action</th>
                 </tr>
@@ -23,7 +29,7 @@
             <tbody>
                 <% if (tasks.length === 0) { %>
                     <tr>
-                        <td colspan="4">No tasks found</td>
+                        <td colspan="5">No tasks found</td>
                     </tr>
                 <% } else { %>
                     <% tasks.forEach(task => { %>
@@ -32,6 +38,7 @@
                             <td>
                                 <a href="/tasks/single-task/<%= task.id %>"><%= task.task %></a>
                             </td>
+                            <td><%= task.alarm ? task.alarm.toLocaleString() : 'No alarm' %></td>
                             <td>
                                 <form>
                                     <label class="custom-checkbox">
@@ -55,5 +62,78 @@
     <footer>
         <h3>Created by Ossai Mark</h3>
     </footer>
+
+    <!-- Audio element for the alarm sound -->
+    <audio id="alarm-sound" src="/sounds/alarm.mp3"></audio>
+
+    <script>
+        // Pass tasks from backend to frontend
+        const tasks = <%- JSON.stringify(tasks) %>;
+
+        // Initialize Web Audio API
+        let alarmSoundBuffer;
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        // Load the sound file
+        fetch("/sounds/alarm.mp3")
+            .then(response => response.arrayBuffer())
+            .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+            .then(buffer => {
+                console.log("Alarm sound loaded successfully");
+                alarmSoundBuffer = buffer;
+            })
+            .catch(error => {
+                console.error("Failed to load alarm sound:", error);
+            });
+
+        // Function to play the alarm sound
+        function playAlarmSound() {
+            if (alarmSoundBuffer) {
+                const source = audioContext.createBufferSource();
+                source.buffer = alarmSoundBuffer;
+                source.connect(audioContext.destination);
+                source.start();
+            } else {
+                console.error("Alarm sound buffer not loaded");
+            }
+        }
+
+        // Enable sound on user interaction
+        document.getElementById("enable-sound").addEventListener("click", () => {
+            audioContext.resume().then(() => {
+                console.log("Audio context enabled");
+            });
+        });
+
+        // Function to check for alarms
+        function checkAlarms() {
+            const now = new Date();
+
+            tasks.forEach(task => {
+                if (task.alarm) {
+                    const alarmTime = new Date(task.alarm);
+                    if (alarmTime <= now) {
+                        // Trigger Toastify notification
+                        Toastify({
+                            text: `ALARM: Time to complete "${task.task}"!`,
+                            duration: 6000,
+                            gravity: "top",
+                            position: "right",
+                            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                            onClick: () => {
+                                alert("Task alarm clicked!");
+                            },
+                        }).showToast();
+
+                        // Play the alarm sound
+                        playAlarmSound();
+                    }
+                }
+            });
+        }
+
+        // Check for alarms every minute
+        setInterval(checkAlarms, 6000);
+    </script>
 </body>
 </html>

@@ -2,18 +2,10 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 
-
-let tasks = [
-    { id: 1, task: "Sample Task 1", check: false },
-    { id: 2, task: "Sample Task 2", check: true },
-];
-
-
-
 const app = express();
 
-// Set EJS as the view engine
-app.set('view engine', 'ejs');
+// In-memory storage for tasks
+let tasks = [];
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -21,6 +13,9 @@ app.use(methodOverride('_method'));
 
 // Serve static files
 app.use(express.static('public'));
+
+// Set EJS as the view engine
+app.set('view engine', 'ejs');
 
 // Redirect to the tasks list
 app.get('/', (req, res) => {
@@ -39,11 +34,12 @@ app.get('/tasks/add', (req, res) => {
 
 // Add a new task
 app.post('/tasks/add', (req, res) => {
-    const { task, check } = req.body;
+    const { task, check, alarm } = req.body;
     const newTask = {
         id: tasks.length + 1,
         task,
-        check: check === 'on', // Checkbox sends 'on' when checked
+        check: check === 'on',
+        alarm: alarm ? new Date(alarm) : null,
     };
 
     tasks.push(newTask);
@@ -60,7 +56,6 @@ app.get('/tasks/single-task/:id', (req, res) => {
     }
 
     const taskStatus = task.check ? "Task is done" : "Task is undone";
-
     res.render('single-task.ejs', { task, taskStatus });
 });
 
@@ -79,7 +74,7 @@ app.get('/tasks/edit/:id', (req, res) => {
 // Update a task
 app.put('/tasks/edit/:id', (req, res) => {
     const { id } = req.params;
-    const { task: updatedTask, check } = req.body;
+    const { task: updatedTask, check, alarm } = req.body;
 
     const task = tasks.find((u) => u.id === parseInt(id));
 
@@ -89,25 +84,19 @@ app.put('/tasks/edit/:id', (req, res) => {
 
     task.task = updatedTask;
     task.check = check === 'on';
+    task.alarm = alarm ? new Date(alarm) : null;
 
     res.redirect('/tasks');
 });
 
-// Delete a task and reassign IDs
-app.post('/tasks/delete/g:id', (req, res) => {
+// Delete a task
+app.delete('/tasks/delete/:id', (req, res) => {
     const { id } = req.params;
-
     tasks = tasks.filter((u) => u.id !== parseInt(id));
-
-    // Reassign IDs to maintain sequential order
-    tasks = tasks.map((task, index) => ({
-        ...task,
-        id: index + 1,
-    }));
-
     res.redirect('/tasks');
 });
 
+// Start the server
 const port = 5000;
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

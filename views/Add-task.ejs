@@ -11,18 +11,28 @@
     <div class="maincontainer">
     <div class="container">
         <h1>Create Task</h1>
-        <form action="/tasks/add" method="POST">
-            <label for="task">Task:</label>
-            <input type="text" name="task" id="task" required>
+<form action="/tasks/add" method="POST">
+    <label for="task">Task:</label>
+    <input type="text" id="task-input" name="task" required>
 
-           
+    <label for="alarm">Alarm Time:</label>
+    <input type="datetime-local" id="alarm" name="alarm">
 
-            <button type="submit">Create Task</button>
-        </form>
+    <button type="submit">Create Task</button>
+</form>
     </div>
 </div>
     <footer>
         <h3>Created by Ossai Mark</h3>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const taskInput = document.getElementById('task-input');
+            if (taskInput) {
+                taskInput.focus();
+            }
+        });
+    </script>
 </body>
 </html>
+
