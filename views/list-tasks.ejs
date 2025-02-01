@@ -13,8 +13,8 @@
     <div class="container">
         <a href="/tasks/add"><button class="add-button">Add Task</button></a>
 
-        <!-- Button to enable sound -->
-        <button id="enable-sound">Enable Sound</button>
+        <!-- Button to toggle sound -->
+        <button id="toggle-sound" class="add-button">Enable Sound</button>
 
         <table>
             <thead>
@@ -86,23 +86,31 @@
                 console.error("Failed to load alarm sound:", error);
             });
 
+        // Track sound state
+        let isSoundEnabled = false;
+
         // Function to play the alarm sound
         function playAlarmSound() {
-            if (alarmSoundBuffer) {
+            if (isSoundEnabled && alarmSoundBuffer) {
                 const source = audioContext.createBufferSource();
                 source.buffer = alarmSoundBuffer;
                 source.connect(audioContext.destination);
                 source.start();
-            } else {
-                console.error("Alarm sound buffer not loaded");
             }
         }
 
-        // Enable sound on user interaction
-        document.getElementById("enable-sound").addEventListener("click", () => {
-            audioContext.resume().then(() => {
-                console.log("Audio context enabled");
-            });
+        // Toggle sound button
+        const toggleSoundButton = document.getElementById("toggle-sound");
+        toggleSoundButton.addEventListener("click", () => {
+            isSoundEnabled = !isSoundEnabled; // Toggle sound state
+            toggleSoundButton.textContent = isSoundEnabled ? "Disable Sound" : "Enable Sound";
+
+            // Resume audio context if enabling sound
+            if (isSoundEnabled) {
+                audioContext.resume().then(() => {
+                    console.log("Audio context enabled");
+                });
+            }
         });
 
         // Function to check for alarms
@@ -125,7 +133,7 @@
                             },
                         }).showToast();
 
-                        // Play the alarm sound
+                        // Play the alarm sound (if enabled)
                         playAlarmSound();
                     }
                 }
