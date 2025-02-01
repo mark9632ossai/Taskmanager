@@ -9,21 +9,33 @@
 <body>
     <nav>TASK MANAGER APP</nav>
     <div class="container">
+    
     <form action="/tasks/edit/<%= task.id %>?_method=PUT" method="POST">
-        <h1>Edit Task</h1>
+    <h1>Edit Task</h1>
         <label for="task">Task:</label>
-        <input type="text" name="task" id="task" value="<%= task.task %>" required>
+        <input type="text" name="task" id="task-input" value="<%= task.task %>" required>
 
-        <label for="check">
-            <input type="checkbox" name="check" id="check" <%= task.check ? 'checked' : '' %>>
-            Mark as Completed
-        </label>
+    <label for="alarm">Alarm Time:</label>
+    <input type="datetime-local" id="alarm" name="alarm">
 
-        <button type="submit">Save Changes</button>
-    </form>
+    <label for="check">
+        <input type="checkbox" name="check" id="check" <%= task.check ? 'checked' : '' %>>
+        Mark as Completed
+    </label>
+
+    <button type="submit">Save Changes</button>
+</form>
 </div>
     <footer>
         <h3>Created by Ossai Mark</h3>
     </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const taskInput = document.getElementById('task-input');
+            if (taskInput) {
+                taskInput.focus();
+            }
+        });
+    </script>
 </body>
 </html>
