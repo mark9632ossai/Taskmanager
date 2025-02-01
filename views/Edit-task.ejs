@@ -16,7 +16,12 @@
         <input type="text" name="task" id="task-input" value="<%= task.task %>" required>
 
     <label for="alarm">Alarm Time:</label>
-    <input type="datetime-local" id="alarm" name="alarm">
+    <input
+    type="datetime-local"
+    id="alarm"
+    name="alarm"
+    value="<%= task.alarm ? new Date(task.alarm).toISOString().slice(0, 16) : '' %>"
+>
 
     <label for="check">
         <input type="checkbox" name="check" id="check" <%= task.check ? 'checked' : '' %>>
