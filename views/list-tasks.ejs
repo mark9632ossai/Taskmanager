@@ -114,31 +114,58 @@
         });
 
         // Function to check for alarms
-        function checkAlarms() {
-            const now = new Date();
+        // list-tasks.ejs
+let alarmSoundSource = null; // Track the alarm sound source
 
-            tasks.forEach(task => {
-                if (task.alarm) {
-                    const alarmTime = new Date(task.alarm);
-                    if (alarmTime <= now) {
-                        // Trigger Toastify notification
-                        Toastify({
-                            text: `ALARM: Time to complete "${task.task}"!`,
-                            duration: 6000,
-                            gravity: "top",
-                            position: "right",
-                            backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
-                            onClick: () => {
-                                alert("Task alarm clicked!");
-                            },
-                        }).showToast();
-
-                        // Play the alarm sound (if enabled)
-                        playAlarmSound();
-                    }
-                }
-            });
+function playAlarmSound() {
+    if (isSoundEnabled && alarmSoundBuffer) {
+        if (alarmSoundSource) {
+            alarmSoundSource.stop(); // Stop any existing alarm sound
         }
+        alarmSoundSource = audioContext.createBufferSource();
+        alarmSoundSource.buffer = alarmSoundBuffer;
+        alarmSoundSource.connect(audioContext.destination);
+        alarmSoundSource.start();
+    }
+}
+
+function stopAlarmSound() {
+    if (alarmSoundSource) {
+        alarmSoundSource.stop();
+        alarmSoundSource = null;
+    }
+}
+
+function checkAlarms() {
+    const now = new Date();
+
+    tasks.forEach(task => {
+        // Skip tasks that are already completed
+        if (task.check) {
+            return;
+        }
+
+        if (task.alarm) {
+            const alarmTime = new Date(task.alarm);
+            if (alarmTime <= now) {
+                // Trigger Toastify notification
+                Toastify({
+                    text: `ALARM: Time to complete "${task.task}"!`,
+                    duration: 6000,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+                    onClick: () => {
+                        alert("Task alarm clicked!");
+                    },
+                }).showToast();
+
+                // Play the alarm sound (if enabled)
+                playAlarmSound();
+            }
+        }
+    });
+}
 
         // Check for alarms every minute
         setInterval(checkAlarms, 6000);

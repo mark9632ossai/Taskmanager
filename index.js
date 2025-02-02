@@ -82,12 +82,19 @@ app.put('/tasks/edit/:id', (req, res) => {
         return res.status(404).send('Task not found');
     }
 
+    // Update task details
     task.task = updatedTask;
     task.check = check === 'on';
     task.alarm = alarm ? new Date(alarm) : null;
 
+    // If the task is marked as completed, clear the alarm
+    if (task.check) {
+        task.alarm = null; // Clear the alarm
+    }
+
     res.redirect('/tasks');
 });
+
 
 // Delete a task
 app.delete('/tasks/delete/:id', (req, res) => {
