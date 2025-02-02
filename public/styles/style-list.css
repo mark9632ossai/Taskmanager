@@ -139,6 +139,25 @@ h1, h3 {
         font-size: 0.8rem;
     }
 }
+/* Default styles for all screens */
+.container {
+    width: 100%;
+    padding: 20px;
+}
+
+/* Styles for screens smaller than 768px (typical mobile devices) */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+}
+
+/* Styles for screens smaller than 480px (small mobile devices) */
+@media (max-width: 480px) {
+    .container {
+        padding: 5px;
+    }
+}
 
 .custom-checkbox input[type="checkbox"] {
 display: none;
