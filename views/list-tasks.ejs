@@ -32,11 +32,11 @@
                         <td colspan="5">No tasks found</td>
                     </tr>
                 <% } else { %>
-                    <% tasks.forEach(task => { %>
+                    <% tasks.forEach((task, index) => { %>
                         <tr>
-                            <td><%= task.id %></td>
+                            <td><%= index + 1 %></td> <!-- Serial number is index + 1 -->
                             <td>
-                                <a href="/tasks/single-task/<%= task.id %>"><%= task.task %></a>
+                                <a href="/tasks/single-task/<%= task._id %>"><%= task.task %></a>
                             </td>
                             <td><%= task.alarm ? task.alarm.toLocaleString() : 'No alarm' %></td>
                             <td>
@@ -48,8 +48,8 @@
                                 </form>
                             </td>
                             <td>
-                                <a href="/tasks/edit/<%= task.id %>" class="edit-button">Edit</a>
-                                <form action="/tasks/delete/<%= task.id %>?_method=DELETE" method="post" style="display: inline;">
+                                <a href="/tasks/edit/<%= task._id %>" class="edit-button">Edit</a>
+                                <form action="/tasks/delete/<%= task._id %>?_method=DELETE" method="post" style="display: inline;">
                                     <button type="submit" class="delete-button">Delete</button>
                                 </form>
                             </td>

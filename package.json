@@ -8,14 +8,19 @@
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["task", "manager", "todo", "express", "ejs"],
+  "keywords": [
+    "task",
+    "manager",
+    "todo",
+    "express",
+    "ejs"
+  ],
   "author": "Your Name",
   "license": "ISC",
   "description": "A task manager application built with Express, EJS, and MongoDB.",
   "dependencies": {
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.7",
-    "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "method-override": "^3.0.0",

@@ -8,18 +8,50 @@
 </head>
 <body>
     <nav>TASK MANAGER APP</nav>
+    
     <div class="maincontainer">
-    <div class="container">
-        <h1>Task Details</h1>
-        <p><strong>Task:</strong> <%= task.task %></p>
-        <div class="status">
-            <%= taskStatus %>
+        <div class="container">
+            <h1>Task Details</h1>
+            
+            <div class="task-info">
+                <p><strong>Task:</strong> <%= task.task %></p>
+                <p><strong>Status:</strong> <span class="<%= task.check ? 'completed' : 'pending' %>">
+                    <%= taskStatus %>
+                </span></p>
+                <p><strong>Alarm Time:</strong> <%= task.alarm ? new Date(task.alarm).toLocaleString() : 'No alarm set' %></p>
+            </div>
+
+            <!-- Conditional alarm sound button if the task is due -->
+            <% if (!task.check && task.alarm && new Date(task.alarm) <= new Date()) { %>
+                <button id="play-alarm" class="alarm-button">Play Alarm</button>
+            <% } %>
+
+            <div class="actions">
+                <a href="/tasks" class="back-button">Back to Task List</a>
+                <a href="/tasks/edit/<%= task._id %>" class="edit-button">Edit Task</a>
+                <form action="/tasks/delete/<%= task._id %>?_method=DELETE" method="post" style="display:inline;">
+                    <button type="submit" class="delete-button">Delete</button>
+                </form>
+            </div>
         </div>
-        <a href="/tasks">Back to Task List</a>
     </div>
-</div>
+
     <footer>
         <h3>Created by Ossai Mark</h3>
     </footer>
+
+    <!-- Audio for alarm -->
+    <audio id="alarm-sound" src="/sounds/alarm.mp3"></audio>
+
+    <script>
+        const alarmSound = document.getElementById("alarm-sound");
+        const playAlarmButton = document.getElementById("play-alarm");
+
+        if (playAlarmButton) {
+            playAlarmButton.addEventListener("click", () => {
+                alarmSound.play();
+            });
+        }
+    </script>
 </body>
 </html>
