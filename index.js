@@ -3,12 +3,12 @@ import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { connectDB } from './mongodb/config/dbconnection.js'; // Import the connectDB function
-import Task from './mongodb/models/users-model.js'; // Import the Task model
+import { connectDB } from './mongodb/config/dbconnection.js'; // Ensure this reads your MONGO_URI from env
+import Task from './mongodb/models/users-model.js';
 
 const app = express();
 
-// If you need __dirname when using ES modules:
+// For ES Modules, define __dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -46,7 +46,7 @@ app.get('/tasks', async (req, res) => {
 
 // Render Add Task page
 app.get('/tasks/add', (req, res) => {
-  // Note: when using EJS, you can omit the extension
+  // You can omit the .ejs extension
   res.render('Add-task');
 });
 
@@ -72,9 +72,7 @@ app.get('/tasks/single-task/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const task = await Task.findById(id);
-    if (!task) {
-      return res.status(404).send('Task not found');
-    }
+    if (!task) return res.status(404).send('Task not found');
     const taskStatus = task.check ? 'Task is done' : 'Task is undone';
     res.render('single-task', { task, taskStatus });
   } catch (error) {
@@ -88,9 +86,7 @@ app.get('/tasks/edit/:id', async (req, res) => {
   const { id } = req.params;
   try {
     const task = await Task.findById(id);
-    if (!task) {
-      return res.status(404).send('Task not found');
-    }
+    if (!task) return res.status(404).send('Task not found');
     res.render('Edit-task', { task });
   } catch (error) {
     console.error('Error fetching task:', error);
@@ -104,18 +100,12 @@ app.put('/tasks/edit/:id', async (req, res) => {
   const { task: updatedTask, check, alarm } = req.body;
   try {
     const task = await Task.findById(id);
-    if (!task) {
-      return res.status(404).send('Task not found');
-    }
-    // Update the task details
+    if (!task) return res.status(404).send('Task not found');
     task.task = updatedTask;
     task.check = check === 'on';
     task.alarm = alarm ? new Date(alarm) : null;
-
-    // If the task is marked as complete, clear the alarm
-    if (task.check) {
-      task.alarm = null;
-    }
+    // Clear alarm if task is marked as completed
+    if (task.check) task.alarm = null;
     await task.save();
     res.redirect('/tasks');
   } catch (error) {
@@ -136,7 +126,7 @@ app.delete('/tasks/delete/:id', async (req, res) => {
   }
 });
 
-// Use the port from the environment if available (important for deployment)
+// Start the server using the environment port if available
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
