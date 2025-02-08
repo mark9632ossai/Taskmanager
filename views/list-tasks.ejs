@@ -63,12 +63,12 @@
     <h3>Created by Ossai Mark</h3>
   </footer>
 
-  <!-- Optional audio element (if you wish to use it directly) -->
+  <!-- Audio element is optional if using the AudioContext -->
   <audio id="alarm-sound" src="/sounds/alarm.mp3"></audio>
 
   <script>
-    // Pass tasks from backend to frontend
-    const tasks = <%- JSON.stringify(tasks) %>;
+    // Initially, get tasks from the server-rendered JSON
+    let tasks = <%- JSON.stringify(tasks) %>;
 
     // Initialize AudioContext
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -79,16 +79,19 @@
     let alarmSoundSource = null;
 
     // Load the alarm sound file
-    fetch("/sounds/alarm.mp3")
-      .then(response => response.arrayBuffer())
-      .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
-      .then(buffer => {
-        console.log("Alarm sound loaded successfully");
-        alarmSoundBuffer = buffer;
-      })
-      .catch(error => {
-        console.error("Failed to load alarm sound:", error);
-      });
+    function loadAlarmSound() {
+      fetch("/sounds/alarm.mp3")
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+        .then(buffer => {
+          console.log("Alarm sound loaded successfully");
+          alarmSoundBuffer = buffer;
+        })
+        .catch(error => {
+          console.error("Failed to load alarm sound:", error);
+        });
+    }
+    loadAlarmSound();
 
     // Function to play the alarm sound
     function playAlarmSound() {
@@ -118,6 +121,18 @@
       }
     });
 
+    // Fetch the latest tasks from the server every minute
+    function updateTasks() {
+      fetch("/tasks/json") // You'll need to add an endpoint on the server to return JSON data of tasks
+        .then(response => response.json())
+        .then(latestTasks => {
+          tasks = latestTasks;
+        })
+        .catch(error => console.error("Error updating tasks:", error));
+    }
+    // Uncomment the line below if you add the endpoint for dynamic task updates:
+    // setInterval(updateTasks, 60000);
+
     // Function to check for alarms and trigger notifications/sound
     function checkAlarms() {
       const now = new Date();
@@ -145,8 +160,17 @@
       });
     }
 
-    // Check for alarms every 6 seconds (adjust as needed)
+    // Check for alarms every 6 seconds (for testing)
     setInterval(checkAlarms, 6000);
+
+    // Resume AudioContext when the page becomes visible
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && isSoundEnabled) {
+        audioContext.resume().then(() => {
+          console.log("Audio context resumed after visibility change");
+        });
+      }
+    });
   </script>
 </body>
 </html>
