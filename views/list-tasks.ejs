@@ -9,11 +9,15 @@
   <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </head>
 <body>
+  <!-- Fixed Navigation Bar -->
   <nav>TASK MANAGER APP</nav>
+  
+  <!-- Main Content Container -->
   <div class="container">
     <a href="/tasks/add"><button class="add-button">Add Task</button></a>
     <!-- Button to toggle sound -->
     <button id="toggle-sound" class="add-button">Enable Sound</button>
+    
     <table>
       <thead>
         <tr>
@@ -59,15 +63,18 @@
       </tbody>
     </table>
   </div>
+  
+  <!-- Footer -->
   <footer>
     <h3>Created by Ossai Mark</h3>
   </footer>
-
-  <!-- Audio element is optional if using the AudioContext -->
+  
+  <!-- Audio Element (Optional if using AudioContext) -->
   <audio id="alarm-sound" src="/sounds/alarm.mp3"></audio>
-
+  
+  <!-- Client-Side JavaScript for Alarms & Notifications -->
   <script>
-    // Initially, get tasks from the server-rendered JSON
+    // Get tasks from server-rendered JSON
     let tasks = <%- JSON.stringify(tasks) %>;
 
     // Initialize AudioContext
@@ -96,7 +103,6 @@
     // Function to play the alarm sound
     function playAlarmSound() {
       if (isSoundEnabled && alarmSoundBuffer) {
-        // Stop any currently playing sound
         if (alarmSoundSource) {
           alarmSoundSource.stop();
         }
@@ -112,8 +118,6 @@
     toggleSoundButton.addEventListener("click", () => {
       isSoundEnabled = !isSoundEnabled;
       toggleSoundButton.textContent = isSoundEnabled ? "Disable Sound" : "Enable Sound";
-
-      // Resume AudioContext on user interaction if enabling sound
       if (isSoundEnabled) {
         audioContext.resume().then(() => {
           console.log("Audio context enabled");
@@ -121,49 +125,42 @@
       }
     });
 
-    // Fetch the latest tasks from the server every minute
+    // (Optional) Fetch updated tasks from server for real-time data
     function updateTasks() {
-      fetch("/tasks/json") // You'll need to add an endpoint on the server to return JSON data of tasks
+      fetch("/tasks/json")
         .then(response => response.json())
-        .then(latestTasks => {
-          tasks = latestTasks;
-        })
+        .then(latestTasks => { tasks = latestTasks; })
         .catch(error => console.error("Error updating tasks:", error));
     }
-    // Uncomment the line below if you add the endpoint for dynamic task updates:
+    // Uncomment the following line if you add the JSON endpoint:
     // setInterval(updateTasks, 60000);
 
     // Function to check for alarms and trigger notifications/sound
     function checkAlarms() {
       const now = new Date();
       tasks.forEach(task => {
-        // Skip if task is already completed
         if (task.check) return;
         if (task.alarm) {
           const alarmTime = new Date(task.alarm);
           if (alarmTime <= now) {
-            // Trigger Toastify notification
             Toastify({
               text: `ALARM: Time to complete "${task.task}"!`,
               duration: 6000,
               gravity: "top",
               position: "right",
               backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
-              onClick: () => {
-                alert("Task alarm clicked!");
-              },
+              onClick: () => { alert("Task alarm clicked!"); }
             }).showToast();
-            // Play alarm sound if enabled
             playAlarmSound();
           }
         }
       });
     }
 
-    // Check for alarms every 6 seconds (for testing)
+    // Check for alarms every 6 seconds (adjust as needed)
     setInterval(checkAlarms, 6000);
 
-    // Resume AudioContext when the page becomes visible
+    // Resume AudioContext when page becomes visible
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden && isSoundEnabled) {
         audioContext.resume().then(() => {
