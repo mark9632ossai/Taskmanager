@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weekly Timetable</title>
+  <link rel="stylesheet" href="/styles/style-list.css">
+  <!-- You can add additional CSS specific to the timetable -->
+</head>
+<body>
+  <nav>TASK MANAGER APP</nav>
+  <div class="container">
+    <h2>Weekly Timetable</h2>
+    <a href="/timetable/add"><button class="add-button">Add Class</button></a>
+    <a href="/tasks"><button class="add-button">Back To Tasks</button></a>
+    <table>
+      <thead>
+        <tr>
+          <th>Day</th>
+          <th>Subject</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Alarm</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if (classes.length === 0) { %>
+          <tr>
+            <td colspan="6">No classes scheduled.</td>
+          </tr>
+        <% } else { %>
+          <% classes.forEach((classItem, index) => { %>
+            <tr>
+              <td><%= classItem.day %></td>
+              <td><%= classItem.subject %></td>
+              <td><%= classItem.startTime %></td>
+              <td><%= classItem.endTime %></td>
+              <td>
+                <%= classItem.alarm ? new Date(classItem.alarm).toLocaleString() : 'No alarm set' %>
+              </td>
+              <td>
+                <a href="/timetable/edit/<%= classItem._id %>" class="edit-button">Edit</a>
+                <form action="/timetable/delete/<%= classItem._id %>?_method=DELETE" method="post" style="display:inline;">
+                  <button type="submit" class="delete-button">Delete</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  <footer>
+    <h3>Created by Ossai Mark</h3>
+  </footer>
+
+  <!-- (Optional) You can include the alarm JS code similar to the tasks page below -->
+  <script>
+    // Assume classes data is passed as JSON
+    let classes = <%- JSON.stringify(classes) %>;
+  
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    let isSoundEnabled = false;
+    let alarmSoundBuffer;
+    let alarmSoundSource = null;
+  
+    function loadAlarmSound() {
+      fetch("/sounds/alarm.mp3")
+        .then(response => response.arrayBuffer())
+        .then(arrayBuffer => audioContext.decodeAudioData(arrayBuffer))
+        .then(buffer => {
+          alarmSoundBuffer = buffer;
+        })
+        .catch(error => console.error("Error loading sound:", error));
+    }
+    loadAlarmSound();
+  
+    function playAlarmSound() {
+      if (isSoundEnabled && alarmSoundBuffer) {
+        if (alarmSoundSource) alarmSoundSource.stop();
+        alarmSoundSource = audioContext.createBufferSource();
+        alarmSoundSource.buffer = alarmSoundBuffer;
+        alarmSoundSource.connect(audioContext.destination);
+        alarmSoundSource.start();
+      }
+    }
+  
+    // Toggle sound
+    const toggleSoundButton = document.getElementById("toggle-sound");
+    if (toggleSoundButton) {
+      toggleSoundButton.addEventListener("click", () => {
+        isSoundEnabled = !isSoundEnabled;
+        toggleSoundButton.textContent = isSoundEnabled ? "Disable Sound" : "Enable Sound";
+        if (isSoundEnabled) {
+          audioContext.resume();
+        }
+      });
+    }
+  
+    function checkClassAlarms() {
+      const now = new Date();
+      classes.forEach(classItem => {
+        if (classItem.alarm) {
+          const alarmTime = new Date(classItem.alarm);
+          if (alarmTime <= now) {
+            Toastify({
+              text: `ALARM: Time for ${classItem.subject} on ${classItem.day}!`,
+              duration: 6000,
+              gravity: "top",
+              position: "right",
+              backgroundColor: "linear-gradient(to right, #ff5f6d, #ffc371)",
+            }).showToast();
+            playAlarmSound();
+          }
+        }
+      });
+    }
+  
+    // Check alarms every few seconds
+    setInterval(checkClassAlarms, 6000);
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Class</title>
+  <link rel="stylesheet" href="/styles/style-list.css">
+</head>
+<body>
+  <nav>TASK MANAGER APP</nav>
+  <div class="container">
+    <h2>Edit Class</h2>
+    <form action="/timetable/edit/<%= classItem._id %>?_method=PUT" method="POST">
+      <div>
+        <label for="subject">Subject:</label>
+        <input type="text" name="subject" id="subject" value="<%= classItem.subject %>" required>
+      </div>
+      <div>
+        <label for="day">Day:</label>
+        <select name="day" id="day" required>
+          <option value="Monday" <%= classItem.day === 'Monday' ? 'selected' : '' %>>Monday</option>
+          <option value="Tuesday" <%= classItem.day === 'Tuesday' ? 'selected' : '' %>>Tuesday</option>
+          <option value="Wednesday" <%= classItem.day === 'Wednesday' ? 'selected' : '' %>>Wednesday</option>
+          <option value="Thursday" <%= classItem.day === 'Thursday' ? 'selected' : '' %>>Thursday</option>
+          <option value="Friday" <%= classItem.day === 'Friday' ? 'selected' : '' %>>Friday</option>
+          <option value="Saturday" <%= classItem.day === 'Saturday' ? 'selected' : '' %>>Saturday</option>
+          <option value="Sunday" <%= classItem.day === 'Sunday' ? 'selected' : '' %>>Sunday</option>
+        </select>
+      </div>
+      <div>
+        <label for="startTime">Start Time:</label>
+        <input type="time" name="startTime" id="startTime" value="<%= classItem.startTime %>" required>
+      </div>
+      <div>
+        <label for="endTime">End Time:</label>
+        <input type="time" name="endTime" id="endTime" value="<%= classItem.endTime %>" required>
+      </div>
+      <div>
+        <label for="alarm">Alarm (optional):</label>
+        <input type="datetime-local" name="alarm" id="alarm" value="<%= classItem.alarm ? classItem.alarm.toISOString().substring(0,16) : '' %>">
+      </div>
+      <div>
+        <button type="submit" class="add-button">Update Class</button>
+      </div>
+    </form>
+    <br>
+    <a href="/timetable">Back to Timetable</a>
+  </div>
+  <footer>
+    <h3>Created by Ossai Mark</h3>
+  </footer>
+</body>
+</html>

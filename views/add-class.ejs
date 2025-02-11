@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Class</title>
+  <link rel="stylesheet" href="/styles/style-list.css">
+</head>
+<body>
+  <nav>TASK MANAGER APP</nav>
+  <div class="container">
+    <h2>Add a New Class</h2>
+    <form action="/timetable/add" method="POST">
+      <div>
+        <label for="subject">Subject:</label>
+        <input type="text" name="subject" id="subject" required>
+      </div>
+      <div>
+        <label for="day">Day:</label>
+        <select name="day" id="day" required>
+          <option value="Monday">Monday</option>
+          <option value="Tuesday">Tuesday</option>
+          <option value="Wednesday">Wednesday</option>
+          <option value="Thursday">Thursday</option>
+          <option value="Friday">Friday</option>
+          <option value="Saturday">Saturday</option>
+          <option value="Sunday">Sunday</option>
+        </select>
+      </div>
+      <div>
+        <label for="startTime">Start Time:</label>
+        <input type="time" name="startTime" id="startTime" required>
+      </div>
+      <div>
+        <label for="endTime">End Time:</label>
+        <input type="time" name="endTime" id="endTime" required>
+      </div>
+      <div>
+        <label for="alarm">Alarm (optional):</label>
+        <input type="datetime-local" name="alarm" id="alarm">
+      </div>
+      <div>
+        <button type="submit" class="add-button">Add Class</button>
+      </div>
+    </form>
+    <br>
+    <a href="/timetable">Back to Timetable</a>
+  </div>
+  <footer>
+    <h3>Created by Ossai Mark</h3>
+  </footer>
+</body>
+</html>
