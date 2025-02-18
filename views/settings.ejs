@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings</title>
+  <link rel="stylesheet" href="/styles/style-list.css">
+</head>
+<body>
+  <!-- Fixed Navigation Bar -->
+  <nav>TASK MANAGER APP</nav>
+
+  <!-- Main Content Container -->
+  <div class="container">
+    <h1>Profile Settings</h1>
+    <form action="/settings" method="POST">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" value="<%= user.name %>">
+      <br>
+      <label for="bio">Bio:</label>
+      <textarea id="bio" name="bio"><%= user.bio %></textarea>
+      <br>
+      <label for="profilePicture">Profile Picture URL:</label>
+      <input type="text" id="profilePicture" name="profilePicture" value="<%= user.profilePicture %>">
+      <br>
+      <button type="submit">Save Changes</button>
+    </form>
+    <a href="/tasks">Back to Tasks</a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <h3>Created by Ossai Mark</h3>
+  </footer>
+</body>
+</html>
