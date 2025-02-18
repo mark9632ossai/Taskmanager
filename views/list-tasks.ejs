@@ -11,15 +11,24 @@
 <body>
   <!-- Fixed Navigation Bar -->
   <nav>TASK MANAGER APP</nav>
-  
+
   <!-- Main Content Container -->
   <div class="container">
+    <!-- Display User Profile -->
+    <div class="profile-section">
+      <h1>Profile</h1>
+      <p>Name: <%= user.name %></p>
+      <p>Bio: <%= user.bio %></p>
+      <img src="<%= user.profilePicture %>" alt="Profile Picture" width="100">
+      <a href="/settings">Edit Profile</a>
+    </div>
+
     <a href="/tasks/add"><button class="add-button">Add Task</button></a>
     <!-- Button to toggle sound -->
     <button id="toggle-sound" class="add-button">Enable Sound</button>
     <!-- Timetable Link Button -->
     <a href="/timetable"><button class="add-button">View Timetable</button></a>
-    
+
     <table>
       <thead>
         <tr>
@@ -65,7 +74,7 @@
       </tbody>
     </table>
   </div>
-  
+
   <!-- Footer -->
   <footer>
     <h3>Created by Ossai Mark</h3>
