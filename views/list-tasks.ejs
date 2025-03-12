@@ -223,7 +223,8 @@
     // Resume AudioContext when page becomes visible
     document.addEventListener("visibilitychange", () => {
       if (!document.hidden && isSoundEnabled) {
-        audioContext.resume().then(() => {
+        audioContext.resume().then(() =>
+         {
           console.log("Audio context resumed after visibility change");
         });
       }
