@@ -11,7 +11,7 @@ import { connectDB } from './mongodb/config/dbconnection.js';
 import Task from './mongodb/models/users-model.js';
 import User from './mongodb/models/user-model.js';
 import timetableRoutes from './timetable.js';
-import './mongodb/config/passport.js'; // Import Passport configuration
+import './mongodb/config/passport.js';
 import multer from 'multer';
 
 dotenv.config(); // Load environment variables
@@ -37,7 +37,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Session middleware
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'your-secret-key', // Use env variable for security
+    secret: process.env.SESSION_SECRET || 'your-secret-key',
     resave: false,
     saveUninitialized: false,
   })
@@ -81,7 +81,7 @@ app.get('/register', (req, res) => {
 // Register Logic
 app.post('/register', async (req, res) => {
   let { username, password } = req.body;
-  username = username.trim(); // Remove extra spaces
+  username = username.trim();
 
   try {
     const existingUser = await User.findOne({ username });
@@ -155,7 +155,6 @@ app.post('/settings', ensureAuthenticated, async (req, res) => {
   }
 });
 
-
 // List tasks
 app.get('/tasks', ensureAuthenticated, async (req, res) => {
   try {
@@ -163,6 +162,33 @@ app.get('/tasks', ensureAuthenticated, async (req, res) => {
     res.render('list-tasks', { tasks, user: req.user });
   } catch (error) {
     console.error('Error fetching tasks:', error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+// Search tasks by name or serial number
+app.get('/tasks/search', ensureAuthenticated, async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query) return res.redirect('/tasks');
+
+    // Fetch all tasks for the current user
+    const tasks = await Task.find({ user: req.user._id }).lean();
+
+    let filteredTasks;
+    // If the query is numeric, treat it as a serial number (index + 1)
+    if (/^\d+$/.test(query)) {
+      const serialNum = parseInt(query, 10);
+      filteredTasks = tasks.filter((task, index) => index + 1 === serialNum);
+    } else {
+      // Otherwise, perform a case-insensitive search on the task name
+      const regex = new RegExp(query, 'i');
+      filteredTasks = tasks.filter(task => regex.test(task.task));
+    }
+
+    res.render('list-tasks', { tasks: filteredTasks, user: req.user });
+  } catch (error) {
+    console.error('Error searching tasks:', error);
     res.status(500).send('Internal Server Error');
   }
 });
