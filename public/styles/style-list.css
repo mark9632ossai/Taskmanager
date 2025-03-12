@@ -1,224 +1,285 @@
 /* Basic Reset */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  /* Body & Background */
-  body {
-    font-family: Arial, sans-serif;
-    color: #333;
-    background-image: url('/img/taskmanager-bg.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-  }
-  
-  /* Fixed Navigation Bar */
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body & Background */
+body {
+  font-family: Arial, sans-serif;
+  color: #333;
+  background-image: url('/img/taskmanager-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Fixed Navigation Bar */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: rgba(0, 119, 182, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  z-index: 1000;
+}
+
+/* Main Container */
+.container {
+  max-width: 900px;
+  width: 90%;
+  margin: 80px auto 20px auto; /* 80px top margin to account for fixed nav */
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styles */
+.add-button {
+  background-color: #00b4d8;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.add-button:hover {
+  background-color: #0096c7;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table, th, td {
+  border: 1px solid #ddd;
+}
+
+th, td {
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background-color: #0077b6;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Edit & Delete Buttons */
+.edit-button {
+  background: #38b000;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+  background-color: #2d6a4f;
+}
+
+.delete-button {
+  background: #e63946;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #d00000;
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-color: rgba(2, 62, 138, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 0.9rem;
+}
+
+/* Headings */
+h1, h3 {
+  margin: 0;
+}
+
+/* Custom Checkbox */
+.custom-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.custom-checkbox {
+  display: inline-block;
+  position: relative;
+  cursor: not-allowed;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.custom-checkbox .checkmark {
+  width: 20px;
+  height: 20px;
+  background-color: #ddd;
+  border-radius: 4px;
+  display: inline-block;
+  position: relative;
+  transition: background-color 0.3s, border-color 0.3s;
+  border: 2px solid #ccc;
+}
+
+.custom-checkbox .checkmark::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 14px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  top: 2px;
+  left: 6px;
+  display: none;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .checkmark {
+  background-color: #0077b6;
+  border-color: #0077b6;
+}
+
+.custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
+  display: block;
+}
+
+/* Search Bar Styles */
+.search-container {
+  margin: 20px 0;
+  text-align: center;
+}
+
+#search-form {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+  padding: 10px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  flex: 1;
+}
+
+.search-button,
+.reset-button {
+  padding: 10px 15px;
+  background-color: #007BFF;
+  color: #fff;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+  margin-left: 5px;
+}
+
+.search-button:hover,
+.reset-button:hover {
+  background-color: #0056b3;
+}
+
+.reset-button {
+  display: inline-block;
+}
+
+/* Responsive Styles */
+
+/* For tablets and smaller devices */
+@media (max-width: 768px) {
   nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background-color: rgba(0, 119, 182, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-    z-index: 1000;
+    font-size: 1.2rem;
   }
   
-  /* Main Container */
-  .container {
-    max-width: 900px;
-    width: 90%;
-    margin: 80px auto 20px auto; /* 80px top margin to account for fixed nav */
-    background-color: rgba(255, 255, 255, 0.95);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Button Styles */
   .add-button {
-    background-color: #00b4d8;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    font-size: 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .add-button:hover {
-    background-color: #0096c7;
-  }
-  
-  /* Table Styles */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-  }
-  
-  table, th, td {
-    border: 1px solid #ddd;
+    font-size: 0.9rem;
+    padding: 8px 12px;
   }
   
   th, td {
-    padding: 12px;
-    text-align: center;
-  }
-  
-  th {
-    background-color: #0077b6;
-    color: white;
-  }
-  
-  tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  /* Edit & Delete Buttons */
-  .edit-button {
-    background: #38b000;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    text-decoration: none;
-    transition: background-color 0.3s;
-  }
-  
-  .edit-button:hover {
-    background-color: #2d6a4f;
-  }
-  
-  .delete-button {
-    background: #e63946;
-    color: white;
-    padding: 8px 12px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .delete-button:hover {
-    background-color: #d00000;
-  }
-  
-  /* Footer */
-  footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 50px;
-    background-color: rgba(2, 62, 138, 0.9);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
     font-size: 0.9rem;
+    padding: 8px;
   }
   
-  /* Headings */
-  h1, h3 {
-    margin: 0;
+  .container {
+    padding: 15px;
+    margin: 80px auto 20px auto;
   }
   
-  /* Custom Checkbox */
-  .custom-checkbox input[type="checkbox"] {
-    display: none;
+  footer {
+    font-size: 0.8rem;
+  }
+}
+
+/* For small mobile devices */
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+    margin: 80px auto 10px auto;
   }
   
-  .custom-checkbox {
-    display: inline-block;
-    position: relative;
-    cursor: not-allowed;
-    font-size: 1rem;
-    user-select: none;
+  th, td {
+    font-size: 0.8rem;
+    padding: 6px;
   }
   
-  .custom-checkbox .checkmark {
-    width: 20px;
-    height: 20px;
-    background-color: #ddd;
-    border-radius: 4px;
-    display: inline-block;
-    position: relative;
-    transition: background-color 0.3s, border-color 0.3s;
-    border: 2px solid #ccc;
+  /* Adjust search bar for small screens */
+  #search-form {
+    flex-direction: column;
   }
   
-  .custom-checkbox .checkmark::after {
-    content: "";
-    position: absolute;
-    width: 8px;
-    height: 14px;
-    border: solid white;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-    top: 2px;
-    left: 6px;
-    display: none;
+  .search-input {
+    width: 100%;
+    box-sizing: border-box;
   }
   
-  .custom-checkbox input[type="checkbox"]:checked + .checkmark {
-    background-color: #0077b6;
-    border-color: #0077b6;
+  .search-button,
+  .reset-button {
+    width: 100%;
+    margin: 5px 0;
+    margin-left: 0;
   }
-  
-  .custom-checkbox input[type="checkbox"]:checked + .checkmark::after {
-    display: block;
-  }
-  
-  /* Responsive Styles */
-  
-  /* For tablets and smaller devices */
-  @media (max-width: 768px) {
-    nav {
-      font-size: 1.2rem;
-    }
-    
-    .add-button {
-      font-size: 0.9rem;
-      padding: 8px 12px;
-    }
-    
-    th, td {
-      font-size: 0.9rem;
-      padding: 8px;
-    }
-    
-    .container {
-      padding: 15px;
-      margin: 80px auto 20px auto;
-    }
-    
-    footer {
-      font-size: 0.8rem;
-    }
-  }
-  
-  /* For small mobile devices */
-  @media (max-width: 480px) {
-    .container {
-      padding: 10px;
-      margin: 80px auto 10px auto;
-    }
-    
-    th, td {
-      font-size: 0.8rem;
-      padding: 6px;
-    }
-  }
-  
+}

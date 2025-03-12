@@ -7,6 +7,44 @@
   <link rel="stylesheet" href="/styles/style-list.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <!-- Inline CSS for search bar improvements -->
+  <style>
+    .search-container {
+      margin: 20px 0;
+      text-align: center;
+    }
+    #search-form {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .search-input {
+      padding: 10px;
+      border: none;
+      outline: none;
+      font-size: 16px;
+    }
+    .search-button, .reset-button {
+      padding: 10px 15px;
+      background-color: #007BFF;
+      color: #fff;
+      border: none;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.2s ease;
+    }
+    .search-button:hover, .reset-button:hover {
+      background-color: #0056b3;
+    }
+    .reset-button {
+      display: inline-block;
+      line-height: 1.5;
+    }
+  </style>
 </head>
 <body>
   <!-- Fixed Navigation Bar -->
@@ -23,13 +61,22 @@
       <a href="/settings">Edit Profile</a>
     </div>
 
+    <!-- Improved Search Bar with Reset Button -->
+    <div class="search-container">
+      <form action="/tasks/search" method="GET" id="search-form">
+        <input type="text" name="query" placeholder="Search by task or S/N" class="search-input">
+        <button type="submit" class="search-button">Search</button>
+        <a href="/tasks" class="reset-button">Reset</a>
+      </form>
+    </div>
+
     <a href="/tasks/add"><button class="add-button">Add Task</button></a>
     <!-- Button to toggle sound -->
     <button id="toggle-sound" class="add-button">Enable Sound</button>
     <!-- Timetable Link Button -->
     <a href="/timetable"><button class="add-button">View Timetable</button></a>
 
-    <table>
+    <table id="task-table">
       <thead>
         <tr>
           <th>S/N</th>
